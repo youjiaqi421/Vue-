@@ -5,22 +5,46 @@
           <input type="text"  placeholder="搜索音乐">
       </div>
          <div class='round'></div>
-         <div class='online'  @click="login">
-          点击登录 
+         <div class='online' @click = "login">
+              点击登录 
          </div>
+                <div v-show="appear">
+                <div class="cancel"> 
+                <div class="cancel_main" >
+                      <div class = "cancel_img" @click="cancelClick">
+                         <img src="../assets/logo/cha.svg" >
+                      </div>
+                      <div class = "cancel_logo">
+                         <img src="../assets/logo/logo.jpg" >
+                      </div>  
+                       <div class='login'>
+
+                       </div>
+                </div>        
+                </div> 
+             </div>
+             
   </div>
 </template>
 
 <script>
+// import login from '../views/login.vue'
 export default {
      name:'Navigation',
      data(){
-       return{}
+       return{
+         appear:false,
+       }
      },
+      components:{
+       
+      },
      methods:{
        login(){
-          console.log(1)
-         this.$router.push('Login')
+       this.appear = !this.appear
+       },
+       cancelClick(){
+        this.appear = !this.appear
        }
      }
 }
@@ -64,5 +88,60 @@ export default {
       font-weight: 400;
       margin-left:5px;
     }
+    .cancel{
+       width:100%;
+       height:100%; 
+       position:fixed;
+       top: 0px;
+       left: 0px;
+       bottom: 0px;
+       right: 0px;
+       background:rgb(85, 156, 238,0.2);
+    }  
+    .cancel_main{
+       height:300px;
+       width: 400px;
+       position:absolute; 
+       top: 0px;
+       left: 0px;
+       bottom: 0px;
+       right: 0px;
+       margin: auto;      
+       z-index:-1; 
+       overflow: hidden;   
+       border-radius:0.3em;  
+       box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset,0 .5em 1em rgba(0, 0, 0, 0.3);   
+       text-shadow: 0 1px 1px hsla(0,0%,100%,.3);  
+    }
+    .cancel_main::before{
+       content: '';   
+       position: absolute;   
+       top: 0; 
+       right: 0; 
+       bottom: 0; 
+       left: 0;   
+       margin: -30px;   
+       z-index: -2;   
+       -webkit-filter: blur(20px);   
+       filter: blur(20px);   
+    }
+     .cancel_img img{
+       position: absolute;
+       top: 5px;
+       right: 3px;
+       width: 20px;
+       height: 20px;
+    }
+    .cancel_logo{
+      padding:45px;
+      display: flex;
+      justify-content: center;
+    }
+    .cancel_logo img{
+      width: 80px;
+      height: 80px;
+      border-radius:50%;
 
+    }
+    
 </style>
