@@ -17,8 +17,21 @@
                       <div class = "cancel_logo">
                          <img src="../assets/logo/logo.jpg" >
                       </div>  
-                       <div class='login'>
-
+                       <div class='login_main'>
+                            <div class='login_image'>
+                              <img src="../assets/logo/zhanghao.svg" alt="">
+                              <input type="text" >
+                            </div>
+                            <div class='login_image'>
+                               <img src="../assets/logo/yuechi.svg" alt="">
+                               <input type="password">
+                            </div>
+                            <div class='login_footer'>
+                              <button>注册</button>
+                              <button>登录</button> 
+                            </div>
+                            
+    
                        </div>
                 </div>        
                 </div> 
@@ -96,7 +109,7 @@ export default {
        left: 0px;
        bottom: 0px;
        right: 0px;
-       background:rgb(85, 156, 238,0.2);
+       background:rgba(128, 184, 247, 0.2);
     }  
     .cancel_main{
        height:300px;
@@ -143,5 +156,43 @@ export default {
       border-radius:50%;
 
     }
+    .login_main{
+      display: flex;
+      align-items: center;
+      flex-direction:column;
+    }
+     .login_main input{
+       margin-top:5px;
+       width: 180px;
+       height: 30px;
+       border:none;
+       outline-width: 0px;
+       background-color:#94d0f326;
+     }
+     .login_main img{
+       height:20px;
+       width: 20px;
+       margin-right: 5px;
+     }
+     .login_image{
+       display: flex;
+       align-items: center;
+     }
+     .login_footer button{
+        width:60px;
+        height: 20px;
+        font-size:15px;
+        color:hsl(244, 100%, 74%);
+        margin:10px 0px 0px 10px;
+        border:none;
+        outline-width: 0px;
+        text-transform: uppercase;
+        transition: 0.2s;
+        background-size: 200% auto;
+        background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+     }
+     .login_footer button:hover{
+       background-position: right center
+     }
     
 </style>
