@@ -21,42 +21,56 @@
                       </div>  
                        <div class='login_main' >
                             <div class = "Login_way" v-show="login_appear">
-                              <div class="Login_email" @click="Email" >
-                                    <img src="../assets/logo/login-Email.svg" alt="">
+                              <div class="Login_email" @click="Phone" > 
+                                 <span>登录</span>   
                               </div>
-                              <div class="Login_Phone" @click="Phone">
-                                    <img src="../assets/logo/Phone.svg" alt="">
+                              <div class="Login_Phone" @click="Email">
+                                <span>注册</span>        
                               </div>
                             </div>
 
-                            <!-- 手机 -->
+                            <!-- 登录 -->
                             <div v-show="Phone_appear">
                             <div class='login_image'>
-                              <img src="../assets/logo/zhanghao.svg" alt="">
-                              <input type="text" >
+                              <img src="../assets/logo/shouji.svg" alt="">
+                              <input type="text"  v-model="username">
                             </div>
                             <div class='login_image'>
                                <img src="../assets/logo/yuechi.svg" alt="">
-                               <input type="password" >
+                               <input type="password" v-model="passWord" >
                             </div> 
                             <div class='login_footer'>
-                              <button>注册</button>
                               <button>登录</button> 
                             </div>
                             </div>
-                            <!-- 邮箱 -->
-                            <div v-show="Email_appear">
+
+
+                            <!-- 注册 -->
+                            <div class ='register' v-show="Email_appear">
                             <div class='login_image'>
                               <img src="../assets/logo/zhanghao.svg" alt="">
-                              <input type="text" >
+                              <input type="text"  v-model="username">
                             </div>
+                             <div class='login_image'>
+                               <img src="../assets/logo/shouji.svg" alt="">
+                               <input type="text" v-model="PhoneCall">
+                            </div> 
                             <div class='login_image'>
                                <img src="../assets/logo/yuechi.svg" alt="">
-                               <input type="password" >
+                               <input type="password" v-model="passWord" >
                             </div> 
+                            <div class='login_image'>
+                               <img src="../assets/logo/yanzhengma.svg" alt="">
+                               <input type="text" > 
+                               <div  class="Captcha" @click="captcha()" v-show ='Captcha_show'>
+                                    获取验证码
+                               </div> 
+                                <div  class="Captcha"  v-show ='!Captcha_show'>
+                                    {{timeshow}}S重新获取
+                               </div> 
+                            </div>
                             <div class='login_footer'>
-                              <button>注册</button>
-                              <button>登录</button> 
+                              <button @click = "register">注册</button>
                             </div>
                             </div>
                        </div>
@@ -77,16 +91,20 @@ export default {
          login_appear:true,
          Phone_appear:false,
          Email_appear:false,
-        
+         Captcha_show:true,
+         timeshow:"",
+         username:'',
+         PhoneCall:'',
+         passWord:'',
+         Captcha:'',
+         timer:null,
        }
      },
       components:{
        
       },
      methods:{
-       /**
-        *  
-        */
+       
        login(){
        this.appear = !this.appear,
        this.login_appear=true,
@@ -104,31 +122,33 @@ export default {
        Email(){
          this.login_appear = !this.login_appear
          this.Email_appear = !this.Email_appear
-       }
+       },
+       register(){
+         console.log("1")
+       },
+       /*
+        * 验证码
+        */
+       captcha(){
+         let time  =  5
+         this.timeshow = time
+         this.Captcha_show = false
+         if(this.timeshow > 0){
+               const timer = setInterval(()=>{
+                 if( this.timeshow == 0 ){
+                     clearInterval(timer)
+                     this.Captcha_show = true
+                     }else{
+                      this.timeshow--;
+                     }     
+              },1000)
+          }
+       },
 
      }
 }
 </script>
 
 <style>
-   .Login_way{
-      display: flex;
-      width: 100%;
-      justify-content: space-around;
-   }
-   .Login_email{
-     width: 50px;
-     height: 50px;
-     background-image:url(../assets/logo/login-Email.svg);
-     background-repeat: no-repeat;
-     background-size:50px 50px ;
-   }
-   .Login_Phone{
-     width: 50px;
-     height: 50px;
-     background-image:url(../assets/logo/Phone.svg);
-     background-repeat: no-repeat;
-     background-size:50px 50px ;
-   }
-    
+   
 </style>

@@ -95,7 +95,7 @@
 }
 
 .cancel_logo {
-    padding: 45px;
+    padding: 25px;
     display: flex;
     justify-content: center;
 }
@@ -113,7 +113,7 @@
 }
 
 .login_main input {
-    margin-top: 5px;
+    margin-top: 3px;
     width: 180px;
     height: 30px;
     border: none;
@@ -130,6 +130,20 @@
 .login_image {
     display: flex;
     align-items: center;
+}
+
+.Captcha {
+    position: absolute;
+    left: 310px;
+    border: none;
+    width: 85px;
+    height: 29px;
+    font-size: 5px;
+    background-color: #a1c4fd;
+    color: #276bd8;
+    outline-width: 0px;
+    text-align: center;
+    line-height: 28px
 }
 
 .login_footer {
@@ -162,16 +176,24 @@
 
 .Login_email {
     width: 50px;
-    height: 50px;
-    background-image: url(../logo/login-Email.svg);
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-image: url(../logo/Phone.svg);
     background-repeat: no-repeat;
     background-size: 50px 50px;
+    align-items: center;
 }
 
 .Login_Phone {
     width: 50px;
-    height: 50px;
-    background-image: url(../logo/Phone.svg);
+    height: 80px;
+    background-image: url(../logo/zhuce.svg);
     background-repeat: no-repeat;
     background-size: 50px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
 }
