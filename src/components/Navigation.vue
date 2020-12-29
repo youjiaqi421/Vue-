@@ -32,15 +32,30 @@
                             <!-- 登录 -->
                             <div v-show="Phone_appear">
                             <div class='login_image'>
+                               <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+  <el-form-item label="密码" prop="pass">
+    <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item label="确认密码" prop="checkPass">
+    <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item label="年龄" prop="age">
+    <el-input v-model.number="ruleForm.age"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+    <el-button @click="resetForm('ruleForm')">重置</el-button>
+  </el-form-item>
+</el-form>
                               <img src="../assets/logo/shouji.svg" alt="">
-                              <input type="text"  v-model="username">
+                              <input type="text" v-model="username" @blur="checkout_username">
                             </div>
                             <div class='login_image'>
                                <img src="../assets/logo/yuechi.svg" alt="">
                                <input type="password" v-model="passWord" >
                             </div> 
                             <div class='login_footer'>
-                              <button>登录</button> 
+                              <button >登录</button> 
                             </div>
                             </div>
 
@@ -82,7 +97,8 @@
 </template>
 
 <script>
-import '../assets/css/login.css'
+import '../assets/css/login.css';
+import  {validMobile}  from  '../until/rules.js'
 export default {
      name:'Navigation',
      data(){
@@ -104,7 +120,6 @@ export default {
        
       },
      methods:{
-       
        login(){
        this.appear = !this.appear,
        this.login_appear=true,
@@ -144,7 +159,16 @@ export default {
               },1000)
           }
        },
-
+       /*
+        * 登录 
+        */
+       checkout_username(){
+         if( this.username != '' && validMobile(this.username)){
+                ('请填写正确的手机号码');
+                return
+          } 
+       }
+         
      }
 }
 </script>
