@@ -11,14 +11,15 @@ let phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
 
 // 必须为数字
 let numberReg = /^\d+$|^\d+[.]?\d+$/
-
+    // 用户名称
+var Username = /^\w\w{7,11}$/;
 // 密码
 let passwordReg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/
 
 // 联系人
 let contactsReg = /^[\u0391-\uFFE5A-Za-z]+$/
 
-let regId = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+// let Id = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
 
 let emailReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
     // 账号的验证规则
@@ -47,6 +48,18 @@ export function validateNumber(rule, value, callback) {
         callback()
     }
 }
+// 用户名称
+export function validateUserName(rule, value, callback) {
+    if (!value) {
+        return callback(new Error('用户名未填写'))
+    }
+    if (!Username.test(value)) {
+        callback(new Error('命名不合法'))
+    } else {
+        callback()
+    }
+
+}
 
 // 密码的验证
 
@@ -55,7 +68,7 @@ export function validatePsdReg(rule, value, callback) {
         return callback(new Error('请输入密码'))
     }
     if (!passwordReg.test(value)) {
-        callback(new Error('请输入6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'))
+        callback(new Error('请输入6-20位英文字母、数字或者符号,至少含有俩种'))
     } else {
         callback()
     }
@@ -83,6 +96,11 @@ export function validateEmail(rule, value, callback) {
         } else {
             callback()
         }
+        // if (!regId.test(value)) {
+        //     callback(new Error('请输入正确的二代身份证号码'))
+        // } else {
+        //     callback()
+        // }
     } else {
         callback()
     }
@@ -105,12 +123,7 @@ export function validatePhone(rule, value, callback) {
 
 export function ID(rule, value, callback) {
     if (!value) {
-        return callback(new Error('身份证不能为空'))
-    }
-    if (!regId.test(value)) {
-        callback(new Error('请输入正确的二代身份证号码'))
-    } else {
-        callback()
+        return callback(new Error('验证码不能为空'))
     }
 }
 
