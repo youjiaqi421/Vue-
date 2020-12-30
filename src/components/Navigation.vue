@@ -90,7 +90,8 @@
 
 <script>
 import "../assets/css/login.css";
- import { validatePhone ,validatePsdReg,validateUserName,ID} from "../until/rules.js";
+import {captchaPhone} from "../until/Api.js"
+import { validatePhone ,validatePsdReg,validateUserName,ID} from "../until/rules.js";
 export default {
   name: "Navigation",
   data() {
@@ -171,7 +172,8 @@ export default {
              }else {
                return false;
           }
-      })  
+      }) 
+     
      },
      //注册提交
     ClickForm(fromResgin){  
@@ -183,11 +185,16 @@ export default {
                return false;
           }
        })  
+     
+      
      },
      /*
      * 验证码
      */
     capCode() {
+      let phone = this.fromResgin.Phone
+      console.log()
+      captchaPhone(phone)
       let time = 60;
       this.timeShow = time;
       this.captchaShow = false;
@@ -201,11 +208,7 @@ export default {
           }
         }, 1000);
       } 
-  }
-    
-    
-    
-  
+  } 
 };
 </script>
 
