@@ -1,70 +1,129 @@
-//手机号
-export const validMobile = (value) => {
-    const reg = /^1\d{10}$/;
-    return reg.test(value);
-};
+/**
+ * @author 由佳奇
+ * @date 2020/12/29
+ * @Description: 校验公共方法
+ */
 
-//金额 正数，保留两位小数
-export const validPositiveNum = (value) => {
-    let reg = /^\d+(\.\d{1,2})?$/;
-    return reg.test(value);
+// 账号
+let codeReg = /^(?![0-9]*$)(?![a-zA-Z]*$)[a-zA-Z0-9]{6,20}$/
+    // 电话
+let phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
 
-};
+// 必须为数字
+let numberReg = /^\d+$|^\d+[.]?\d+$/
 
-//正整数
-export const validTerm = (value) => {
-    const reg = /^[1-9]{1}[0-9]?$/;
-    return reg.test(value);
-};
+// 密码
+let passwordReg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/
 
-//密码，5-15位英文大小写和数字
-export const validPwd = (value) => {
-    const reg = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$).{8,15}$/;
-    return reg.test(value);
-};
+// 联系人
+let contactsReg = /^[\u0391-\uFFE5A-Za-z]+$/
 
-export const checkIDCard = (idcode) => {
-    // 函数参数必须是字符串，因为二代身份证号码是十八位，而在javascript中，十八位的数值会超出计算范围，造成不精确的结果，导致最后两位和计算的值不一致，从而该函数出现错误。
-    // 详情查看javascript的数值范围
-    // 加权因子
-    const weight_factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
-    // 校验码
-    const check_code = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'];
+let regId = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
 
-    const code = idcode + "";
-    const last = idcode[17]; //最后一个
+let emailReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
+    // 账号的验证规则
 
-    const seventeen = code.substring(0, 17);
-
-    // ISO 7064:1983.MOD 11-2
-    // 判断最后一位校验码是否正确
-    const arr = seventeen.split("");
-    const len = arr.length;
-    let num = 0;
-    for (let i = 0; i < len; i++) {
-        num = num + arr[i] * weight_factor[i];
+export function validateCode(rule, value, callback) {
+    if (!value) {
+        return callback(new Error('请输入账号'))
     }
+    if (!codeReg.test(value)) {
+        callback(new Error('账号必须为6-20位字母和数字组合'))
+    } else {
+        callback()
+    }
+}
 
-    // 获取余数
-    const resisue = num % 11;
-    const last_no = check_code[resisue];
+// 只能数字的验证
 
-    // 格式的正则
-    // 正则思路
-    /*
-     第一位不可能是0
-     第二位到第六位可以是0-9
-     第七位到第十位是年份，所以七八位为19或者20
-     十一位和十二位是月份，这两位是01-12之间的数值
-     十三位和十四位是日期，是从01-31之间的数值
-     十五，十六，十七都是数字0-9
-     十八位可能是数字0-9，也可能是X
-     */
-    const idcard_patter = /^[1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X])$/;
+export function validateNumber(rule, value, callback) {
+    if (value !== '') {
+        if (!numberReg.test(value)) {
+            callback(new Error('员工数量必须为数字'))
+        } else {
+            callback()
+        }
+    } else {
+        callback()
+    }
+}
 
-    // 判断格式是否正确
-    const format = idcard_patter.test(idcode);
+// 密码的验证
 
-    // 返回验证结果，校验码和格式同时正确才算是合法的身份证号码
-    return last === last_no && format ? true : false;
+export function validatePsdReg(rule, value, callback) {
+    if (!value) {
+        return callback(new Error('请输入密码'))
+    }
+    if (!passwordReg.test(value)) {
+        callback(new Error('请输入6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'))
+    } else {
+        callback()
+    }
+}
+
+// 联系人
+
+export function validateContacts(rule, value, callback) {
+    if (!value) {
+        return callback(new Error('请输入联系人'))
+    }
+    if (!contactsReg.test(value)) {
+        callback(new Error('联系人不可输入特殊字符'))
+    } else {
+        callback()
+    }
+}
+
+// 邮箱的验证规则
+
+export function validateEmail(rule, value, callback) {
+    if (value !== '') {
+        if (!emailReg.test(value)) {
+            callback(new Error('邮箱格式不正确'))
+        } else {
+            callback()
+        }
+    } else {
+        callback()
+    }
+}
+
+// 电话号码的验证
+
+export function validatePhone(rule, value, callback) {
+    if (!value) {
+        return callback(new Error('请输入手机号码'))
+    }
+    if (!phoneReg.test(value)) {
+        callback(new Error('手机格式不正确'))
+    } else {
+        callback()
+    }
+}
+
+// 身份证的验证规则
+
+export function ID(rule, value, callback) {
+    if (!value) {
+        return callback(new Error('身份证不能为空'))
+    }
+    if (!regId.test(value)) {
+        callback(new Error('请输入正确的二代身份证号码'))
+    } else {
+        callback()
+    }
+}
+
+
+export function validatePhonetw(rule, value, callback) {
+    const reg = /^[1][3-9][0-9]{9}$/;
+    if (value == '' || value == undefined || value == null) {
+        callback(new Error('输入为空'));
+    } else {
+        if ((!reg.test(value)) && value != '') {
+            callback(new Error('请输入正确的电话号码'));
+        } else {
+            callback();
+        }
+    }
 }

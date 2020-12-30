@@ -12,178 +12,159 @@
       <div class="cancel">
         <div class="cancel_main">
           <div class="cancel_img" @click="loginCancel">
-            <img src="../assets/logo/cha.svg" />
+             <img src="../assets/logo/cha.svg" />
+          </div>
+          <div class="back_img" @click="login" >
+            <img src="../assets/logo/huitui.svg" />
           </div>
           <div class="cancel_logo">
             <img src="../assets/logo/logo.jpg" />
           </div>
-          <div class="login_main">
-            <div class="Login_way" v-show="login_appear">
-              <div class="Login_email" @click="Phone">
+            <div class="login_main">
+            <!-- 主页 -->
+              <div class="Login_way" v-show="login_show">
+              <div class="Login_email" @click="login_up">
                 <span>登录</span>
               </div>
-              <div class="Login_Phone" @click="Email">
+              <div class="Login_Phone" @click="resgin_down">
                 <span>注册</span>
               </div>
             </div>
-
             <!-- 登录 -->
-            <div v-show="Phone_appear">
-              <div class="login_image">
-                <el-form
-                  :model="ruleForm"
-                  status-icon
-                  ref="ruleForm"
-                  label-width="100px"
-                  class="demo-ruleForm"
-                >
-                  <el-form-item label prop="username" style="margin-bottom:0px" :rules="{required: true, pattern: /^[0-9]*$/g, message:'用户名需要为数字！'}">
-                    <img
-                      src="../assets/logo/zhanghao.svg"
-                      style="display: inline-block;margin-left: -80px;"
-                    />
-                    <el-input
-                      maxlength="11"
-                      clearable
-                      v-model="ruleForm.username"
-                      placeholder="请输入手机号"
-                      style="display: inline;"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label prop="password" style="margin-bottom:0px" :rules="{required: true, message:'密码不能为空！'}">
-                    <img
-                      src="../assets/logo/yuechi.svg"
-                      style="display: inline-block;margin-left: -80px;"
-                    />
-                    <el-input
-                      type="password"
-                      clearable
-                      v-model="ruleForm.password"
-                      placeholder="请输入密码"
-                      style="display: inline;"
-                    ></el-input>
-                  </el-form-item>
-                  <div class="login_footer">
-                    <button @click="submitForm()">登录</button>
-                  </div>
-                </el-form>
+            <div class="login_account" v-show="login_count">
+               <el-form class="login_count" ref="formDate" :model="formDate" :rules="rules">
+                <div class="login_account_img">
+                <img src="../assets/logo/shouji.svg" />
+                <el-form-item  prop="userName">
+                  <el-input class="input_style" v-model="formDate.userName"  auto-complete="true"></el-input>
+                </el-form-item>
+                </div>
+                <div class='login_account_img'>
+                 <img src="../assets/logo/yuechi.svg" />               
+                 <el-form-item prop="passWord">
+                  <el-input class="input_style" v-model.trim="formDate.passWord"></el-input>
+                </el-form-item>
               </div>
+               </el-form>
+              <button @click="submitForm('formDate')">登录</button>
             </div>
 
-            <!-- 注册 -->
-            <div class="register" v-show="Email_appear">
-              <div class="login_image">
-                <img src="../assets/logo/zhanghao.svg" alt />
-                <input type="text" v-model="username" />
-              </div>
-              <div class="login_image">
-                <img src="../assets/logo/shouji.svg" alt />
-                <input type="text" v-model="PhoneCall" />
-              </div>
-              <div class="login_image">
-                <img src="../assets/logo/yuechi.svg" alt />
-                <input type="password" v-model="passWord" />
-              </div>
-              <div class="login_image">
-                <img src="../assets/logo/yanzhengma.svg" alt />
-                <input type="text" />
-                <div class="Captcha" @click="captcha()" v-show="Captcha_show">获取验证码</div>
-                <div class="Captcha" v-show="!Captcha_show">{{timeshow}}S重新获取</div>
-              </div>
-              <div class="login_footer">
-                <button @click="register">注册</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+
+           </div>  
+         </div>
+      </div> 
+    </div>     
   </div>
 </template>
 
 <script>
 import "../assets/css/login.css";
-// import { validMobile } from "../until/rules.js";
+ import { validatePhone ,validatePsdReg} from "../until/rules.js";
 export default {
   name: "Navigation",
   data() {
     return {
       appear: false,
-      login_appear: true,
-      Phone_appear: false,
-      Email_appear: false,
-      Captcha_show: true,
-      timeshow: "",
-      username: "",
-      PhoneCall: "",
-      passWord: "",
-      Captcha: "",
-      timer: null,
+      login_show:true,
+      login_count:false,
+
       //登录信息表单内容
-      ruleForm: {
-        username: "",
-        password: ""
+     formDate:{
+         userName:'',
+         passWord:''
+      },
+      rules:{
+        userName:[
+            {required: true, validator:validatePhone , trigger: 'blur' },
+          ],
+        passWord:[
+             {required: true, validator:validatePsdReg, trigger: 'blur'}
+        ]
       }
     };
   },
   components: {},
   methods: {
+    // 出现登录主界面
     login() {
-      (this.appear = !this.appear),
-        (this.login_appear = true),
-        (this.Phone_appear = false),
-        (this.Email_appear = false);
+      console.log('展示')
+      this.appear = true;
+      this.login_show = true;
+      this.login_count = false;
     },
-
+    // 取消登录界面
     loginCancel() {
       this.appear = !this.appear;
-      this.$refs['ruleForm'].resetFields();
     },
-    Phone() {
-      this.login_appear = !this.login_appear;
-      this.Phone_appear = !this.Phone_appear;
+    // 展示登录界面
+    login_up() {
+      this.login_show=!this.login_show,
+      this.login_count=!this.login_count
+    }, 
+    // 注册界面
+    resgin_down(){
+      console.log('注册')
     },
-    Email() {
-      this.login_appear = !this.login_appear;
-      this.Email_appear = !this.Email_appear;
-    },
-    register() {
-      console.log("1");
-    },
+    submitForm(formDate){ 
+      console.log(this.$refs[formDate].validate)  
+      this.$refs[formDate].validate((valid)=>{
+            console.log(valid)
+            if (valid) {
+                alert('submit!');
+             }else {
+               return false;
+          }
+      })  
+     },
+    
+  },
+
+    
+    
+    
     /*
      * 验证码
      */
-    captcha() {
-      let time = 5;
-      this.timeshow = time;
-      this.Captcha_show = false;
-      if (this.timeshow > 0) {
-        const timer = setInterval(() => {
-          if (this.timeshow == 0) {
-            clearInterval(timer);
-            this.Captcha_show = true;
-          } else {
-            this.timeshow--;
-          }
-        }, 1000);
-      }
-    },
+    // captcha() {
+    //   let time = 5;
+    //   this.timeshow = time;
+    //   this.Captcha_show = false;
+    //   if (this.timeshow <= 0) return
+    //   const timer = setInterval(() => {
+    //       if (this.timeshow === 0) {
+    //         clearInterval(timer);
+    //         this.Captcha_show = true;
+    //       } else {
+    //         this.timeshow--;
+    //       }
+    //     }, 1000);
+    //   }
+    
     /*
      * 登录：提价登录信息内容
      */
-    submitForm(){
-      this.$refs['ruleForm'].validate(valid => {
-        if(valid) {
-          //请求，接口连接
-          console.log('success')
-        } else {
-          this.$message.error('表单填写不符合规则，请核实！')
-        }
-      })
-    }
-  }
+    // submitForm(){
+    //   this.$refs['ruleForm'].validate(valid => {
+    //     if(valid) {
+    //       //请求，接口连接
+    //       console.log('success')
+    //     } else {
+    //       this.$message.error('表单填写不符合规则，请核实！')
+    //     }
+    //   })
+    // }
+  
 };
 </script>
 
-<style>
+<style scoped>
+::v-deep .el-input__inner{
+  padding: 0px;
+  width: 227px;
+  height:33px;
+  outline-width: 0px;
+  background-color:hsl(219, 76%, 81%,0.1)
+  
+}
 </style>
