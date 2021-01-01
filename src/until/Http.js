@@ -1,13 +1,20 @@
 import axios from 'axios'
+// import { Message } from 'element-ui';
 // import store from '../store'
-const service = axios.create({
-    baseURL: 'http://localhost:3000/song/url?id=33894312&proxy=http://121.196.226.246:84',
-    timeout: 10000 // 请求超时时间
+const App = axios.create({
+        baseURL: 'http://localhost:3000',
+        timeout: 10000
+
+    })
+    // service.interceptors.request.use(config => {
+    //     //判断token  格式化数据
+    //     return config
+    // }, )
+App.interceptors.response.use(config => {
+    //判断状态码 返回数据
+    console.dir(config)
+    return config
 })
 
-// service.interceptors.request.use( config => {
 
-//     },
-
-// )
-export default service
+export default App

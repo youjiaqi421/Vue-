@@ -1,25 +1,85 @@
 /**
  * @author 由佳奇
  * @date 2020/12/30
- * @Description: 登录
+ * @Description: API
  */
-import service from './Http.js'
-export function loginCount(captch, phone, password, nickname) {
-    return service({
-        url: '/register/cellphone',
-        params: {
-            captcha: captch,
-            phone: phone,
-            password: password,
-            nickname: nickname
-        }
-    })
-}
+import App from './Http.js'
+import { Message } from 'element-ui';
+// 验证码
 export function captchaPhone(phone) {
-    return service({
-        url: '/captcha/sent',
+    return App({
+            method: 'get',
+            url: '/captcha/sent',
+            params: {
+                phone
+            }
+        }).then((resolve) => {
+            console.log(resolve, "2")
+        })
+        .catch((err) => {
+            if (err.response.data.code === 400) {
+                Message({
+                    message: "手机号码不符合规范",
+                    center: true,
+                })
+            }
+
+        })
+}
+
+//校验验证码 
+
+export function captchaVerify(phone, captcha) {
+    return App({
+            method: 'get',
+            url: '/captcha/verify',
+            params: {
+                phone,
+                captcha
+            }
+        })
+        .catch((err) => {
+            if (err.response.data.code === 400) {
+                Message({
+                    message: "验证码错误",
+                    center: true,
+                })
+            }
+
+        })
+}
+// 注册
+
+export function LoginUser(phone, captcha, password, nickname) {
+    return App({
+            method: 'post',
+            url: '/register/cellphone',
+            params: {
+                captcha,
+                phone,
+                password,
+                nickname
+            }
+        })
+        .catch((err) => {
+            if (err.response.data.code === 400) {
+                Message({
+                    message: "验证码错误",
+                    center: true,
+                })
+            }
+
+        })
+}
+
+//登录
+export function LoginUp(phone, password) {
+    return App({
+        method: 'get',
+        url: '/captcha/verify',
         params: {
-            phone: phone
+            phone,
+            password
         }
     })
 }

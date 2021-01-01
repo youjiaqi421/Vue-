@@ -12,8 +12,8 @@ let phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
 // 必须为数字
 let numberReg = /^\d+$|^\d+[.]?\d+$/
     // 用户名称
-var Username = /^\w\w{7,11}$/;
-// 密码
+    // var Username = /^\w\w{7,11}$/;
+    // 密码
 let passwordReg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/
 
 // 联系人
@@ -52,9 +52,6 @@ export function validateNumber(rule, value, callback) {
 export function validateUserName(rule, value, callback) {
     if (!value) {
         return callback(new Error('用户名未填写'))
-    }
-    if (!Username.test(value)) {
-        callback(new Error('命名不合法'))
     } else {
         callback()
     }

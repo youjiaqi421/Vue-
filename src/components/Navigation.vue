@@ -35,14 +35,14 @@
                 <el-form class="login_count" ref="formDate" :model="formDate" :rules="rules">
                 <div class="login_account_img">
                 <img src="../assets/logo/shouji.svg" />
-                <el-form-item  prop="userName">
-                  <el-input  v-model.trim="formDate.userName"  auto-complete="true"></el-input>
+                <el-form-item  prop="phone">
+                  <el-input  v-model.trim="formDate.phone"  auto-complete="true"></el-input>
                 </el-form-item>
                 </div>
                 <div class='login_account_img'>
                  <img src="../assets/logo/yuechi.svg" />               
-                 <el-form-item prop="passWord">
-                  <el-input type="password" v-model.trim="formDate.passWord"></el-input>
+                 <el-form-item prop="password">
+                  <el-input type="password" v-model.trim="formDate.password"></el-input>
                 </el-form-item>
                </div>
                 </el-form>
@@ -53,32 +53,32 @@
                <el-form class="login_count" ref="fromResgin" :model="fromResgin" :rules="rules">
                 <div class="login_account_img">
                 <img src="../assets/logo/zhanghao.svg" />
-                <el-form-item  prop="Name">
-                  <el-input class="input_style" v-model.trim="fromResgin.Name"  auto-complete="true"></el-input>
+                <el-form-item  prop="nickname">
+                  <el-input class="input_style" v-model.trim="fromResgin.nickname"  auto-complete="true"></el-input>
                 </el-form-item>
                 </div>
                 <div class='login_account_img'>
                  <img src="../assets/logo/shouji.svg" />               
-                 <el-form-item prop="Phone">
-                 <el-input class="input_style" v-model.trim="fromResgin.Phone"></el-input>
+                 <el-form-item prop="phone">
+                 <el-input class="input_style" v-model.trim="fromResgin.phone"></el-input>
                 </el-form-item>
                </div>
                 <div class="login_account_img">
                 <img src="../assets/logo/yuechi.svg" />
-                <el-form-item  prop="passcode">
-                  <el-input class="input_style" type="password" v-model.trim="fromResgin.passcode"  auto-complete="true"></el-input>
+                <el-form-item  prop="password">
+                  <el-input class="input_style" type="password" v-model.trim="fromResgin.password"  auto-complete="true"></el-input>
                 </el-form-item>
                 </div>
                  <div class="login_account_img">
                 <img src="../assets/logo/yanzhengma.svg" />
-                <el-form-item  prop="code">
-                  <el-input class="input_style" v-model.trim="fromResgin.code"  auto-complete="true"></el-input>
+                <el-form-item  prop="captcha">
+                  <el-input class="input_style" v-model.trim="fromResgin.captcha"  auto-complete="true"></el-input>
                 </el-form-item>
                 <div class="codeStyle"  @click="capCode" v-show ='captchaShow'>获取验证码</div> 
                 <div class = "codeStyle" v-show ='!captchaShow'>{{timeShow}}S之后重新获取</div>
                 </div>
                </el-form>
-                 <button @click="ClickForm('fromResgin')">注册</button>  
+                 <button @click="ClickForm('fromResgin')" >注册</button>  
               
              </div>
            </div>  
@@ -90,7 +90,8 @@
 
 <script>
 import "../assets/css/login.css";
-import {captchaPhone} from "../until/Api.js"
+import { Message } from 'element-ui';
+import { captchaPhone ,LoginUser,LoginUp} from "../until/Api.js"
 import { validatePhone ,validatePsdReg,validateUserName,ID} from "../until/rules.js";
 export default {
   name: "Navigation",
@@ -102,36 +103,34 @@ export default {
       resgin_count:false,
       logo_cancel:true,
       captchaShow:true, 
+      submitDisabled:false,
       timeShow:'',
       //登录信息表单内容
       formDate:{
-         userName:'',
-         passWord:''
+         phone:'',
+         password:''
       },
       //注册信息表单内容
       fromResgin:{
-        Name:'',
-        Phone:'',
-        passcode:'',
-        code:''
+        nickname:'',
+        phone:'',
+        password:'',
+        captcha:''
       },
       rules:{
-        userName:[
-            {required: true, validator:validatePhone , trigger: 'blur' },
-          ],
-        passWord:[
+        password:[
              {required: true, validator:validatePsdReg, trigger: 'blur'}
         ],
-        Name:[
+        nickname:[
             {required: true, validator:validateUserName, trigger: 'blur'}
         ],
-        Phone:[
+        phone:[
             {required: true, validator:validatePhone, trigger: 'blur'}
         ],
         passcode:[
             {required: true, validator:validatePsdReg, trigger: 'blur'}
         ],
-        code:[
+        captcha:[
             {required: true, validator:ID, trigger: 'blur'}
         ]
       }
@@ -164,7 +163,7 @@ export default {
     },
     // 登录提交
     submitForm(formDate){ 
-      console.log(this.$refs[formDate].validate)  
+      let {phone,password} = this.formDate
       this.$refs[formDate].validate((valid)=>{
             console.log(valid)
             if (valid) {
@@ -173,43 +172,51 @@ export default {
                return false;
           }
       }) 
-     
+      LoginUp(phone,password)
      },
      //注册提交
     ClickForm(fromResgin){  
+      let {phone,captcha,password,nickname}  = this.fromResgin
+      // captchaVerify(phone,captcha)
       this.$refs[fromResgin].validate((valid)=>{
-            console.log(valid)
             if (valid) {
                alert('提交成功');
              }else {
                return false;
           }
-       })  
-     
-      
-     },
-     /*
-     * 验证码
-     */
-    capCode() {
-      let phone = this.fromResgin.Phone
-      console.log()
+       }),
+       LoginUser(phone,captcha,password,nickname).then((res) => {
+            if (res.data.code === 200) {
+                Message({
+                    message: "注册成功",
+                    center: true,
+                })
+                this.submitDisabled = true
+            }else{
+                this.submitDisabled = false
+            }
+       })
+    },
+   capCode(){
+      let phone = this.fromResgin.phone
       captchaPhone(phone)
       let time = 60;
       this.timeShow = time;
       this.captchaShow = false;
       if (this.timeShow <= 0) return
-      const timer = setInterval(() => {
+        const timer = setInterval(() => {
           if (this.timeShow === 0) {
             clearInterval(timer);
             this.captchaShow = true;
-          } else {
+            } else {
             this.timeShow--;
           }
         }, 1000);
-      } 
-  } 
-};
+    }
+  },
+    
+
+}
 </script>
 
 <style scoped>
