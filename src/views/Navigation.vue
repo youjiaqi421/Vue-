@@ -5,8 +5,9 @@
       <input type="text" placeholder="搜索音乐" />
     </div>
     <div class="login">
-      <div class="round"></div>
-      <div class="online" @click="login">点击登录</div>
+      <img class="round" :src='avatarUrl ? avatarUrl : null'>
+      <div class="online" @click="login" v-if="nickname == ''">点击登录</div>
+      <div class="online" v-else>{{nickname}}</div>
     </div>
     <div v-show="appear">
       <div class="cancel">
@@ -78,7 +79,7 @@
                 <div class = "codeStyle" v-show ='!captchaShow'>{{timeShow}}S之后重新获取</div>
                 </div>
                </el-form>
-                 <button @click="ClickForm('fromResgin')" >注册</button>  
+                 <button @click="ClickForm('fromResgin')" :disabled="submitDisabled">注册</button>  
               
              </div>
            </div>  
@@ -90,7 +91,7 @@
 
 <script>
 import "../assets/css/login.css";
-import { Message } from 'element-ui';
+ import { Message } from 'element-ui';
 import { captchaPhone ,LoginUser,LoginUp} from "../until/Api.js"
 import { validatePhone ,validatePsdReg,validateUserName,ID} from "../until/rules.js";
 export default {
@@ -105,6 +106,8 @@ export default {
       captchaShow:true, 
       submitDisabled:false,
       timeShow:'',
+      nickname:'',
+      avatarUrl:'',
       //登录信息表单内容
       formDate:{
          phone:'',
@@ -162,17 +165,25 @@ export default {
       this.resgin_count = !this.resgin_count
     },
     // 登录提交
-    submitForm(formDate){ 
-      let {phone,password} = this.formDate
-      this.$refs[formDate].validate((valid)=>{
-            console.log(valid)
+   async submitForm(formDate){ 
+       let {phone,password} = this.formDate
+       this.$refs[formDate].validate((valid)=>{
             if (valid) {
-                alert('submit!');
+                return true
              }else {
                return false;
           }
       }) 
-      LoginUp(phone,password)
+      let rsponse =  await LoginUp(phone,password)
+      if  (rsponse.data.code === 200){
+            Message ({
+                     message: "登录成功",
+                     center: true,
+                })
+            this.appear = false;
+            this.nickname = rsponse.data.profile.nickname
+            this.avatarUrl= rsponse.data.profile.avatarUrl
+      }     
      },
      //注册提交
     ClickForm(fromResgin){  
@@ -186,18 +197,25 @@ export default {
           }
        }),
        LoginUser(phone,captcha,password,nickname).then((res) => {
-            if (res.data.code === 200) {
+            console.log(res,'3333')
+           if (res.data.code === 200) {
                 Message({
                     message: "注册成功",
                     center: true,
                 })
                 this.submitDisabled = true
+                this.appear = true;
+                this.login_show = true;
+                this.login_count = false;
+                this.resgin_count = false;
+                this.logo_cancel = true
             }else{
                 this.submitDisabled = false
             }
        })
     },
-   capCode(){
+    //倒计时
+    capCode(){
       let phone = this.fromResgin.phone
       captchaPhone(phone)
       let time = 60;

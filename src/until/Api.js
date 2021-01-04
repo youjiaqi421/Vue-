@@ -75,9 +75,9 @@ export function LoginUser(phone, captcha, password, nickname) {
 //登录
 export function LoginUp(phone, password) {
     return App({
-        method: 'get',
-        url: '/captcha/verify',
-        params: {
+        method: 'post',
+        url: '/login/cellphone',
+        data: {
             phone,
             password
         }

@@ -12,14 +12,7 @@ const routes = [{
             title: '小兔兔音乐'
         }
     },
-    {
-        path: '/login',
-        name: 'Login',
-        component: () =>
-            import ('../views/login.vue')
 
-
-    }
 
 ]
 

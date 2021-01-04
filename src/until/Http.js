@@ -12,7 +12,10 @@ const App = axios.create({
     // }, )
 App.interceptors.response.use(config => {
     //判断状态码 返回数据
-    console.dir(config)
+    console.log(config, '11111')
+        //保存token
+    const loginsTOKEN = config.data.token
+    sessionStorage.setItem('token', loginsTOKEN);
     return config
 })
 

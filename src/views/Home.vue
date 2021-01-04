@@ -4,18 +4,20 @@
       <SideClolumn/>
     </el-aside>
     <el-container>
-    <el-header style="width:100%;height:50px">
+    <el-header style="width:100%;height:50px;">
       <Navigation/>
     </el-header>
-   <el-main>
+   <el-main >
+     <GoodsMain/>
    </el-main>
   </el-container>
 </el-container>
 </template>
 
 <script>
-import SideClolumn from '../components/SideColumn'
-import Navigation from  '../components/Navigation'
+import SideClolumn from './SideColumn'
+import Navigation from  './Navigation'
+import GoodsMain from   './GoodsMain'
 export default {
   name: 'Home',
   data(){
@@ -25,7 +27,8 @@ export default {
   },
   components: {
     SideClolumn,
-     Navigation
+     Navigation,
+      GoodsMain
   }
 }
 </script>
